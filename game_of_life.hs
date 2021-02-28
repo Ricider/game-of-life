@@ -15,7 +15,7 @@ step_board board = board//[(n, new_value n) | n <- [0..dim_x*dim_y-1]] where
 							if (neighbors index == 3) then "O"
 							else " "
   	neighbors index = sum [1 | x <- (filter (>=0) $ filter (<(dim_x*dim_y)) $ map ($index) indexes), board!x == "O"]
-	indexes = [(+(-dim_x-1)),(+(-dim_x)),(+(-dim_x+1)),(+(-1)),(+1),(+(dim_x-1)),(+dim_x),(+(1+dim_x))]
+	indexes = map (+) [-dim_x-1,-dim_x,-dim_x+1,-1,1,dim_x-1,dim_x,1+dim_x]
 
 step_sim board ttl = do
 	draw_board board
@@ -32,5 +32,5 @@ main :: IO ()
 main = do
 	duration:rest <- getArgs
 	let empty = array (0,(dim_x*dim_y-1)) [(i," ") | i <- [0..dim_x*dim_y-1]]
-	let start = empty//[(i,"O") | i <- glider (0) ++ blinker (30) ++ glider (80)]
+	let start = empty//[(i,"O") | i <- glider 0 ++ blinker 30 ++ glider 80]
 	step_sim start $ read duration
